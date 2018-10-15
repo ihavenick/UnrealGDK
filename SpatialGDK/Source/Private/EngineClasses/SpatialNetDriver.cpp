@@ -11,6 +11,10 @@
 #include "Net/RepLayout.h"
 #include "SocketSubsystem.h"
 
+#include "EngineClasses/SpatialActorChannel.h"
+#include "EngineClasses/SpatialNetConnection.h"
+#include "EngineClasses/SpatialPackageMapClient.h"
+#include "EngineClasses/SpatialPendingNetGame.h"
 #include "Interop/Connection/SpatialWorkerConnection.h"
 #include "Interop/GlobalStateManager.h"
 #include "Interop/SpatialPlayerSpawner.h"
@@ -18,11 +22,8 @@
 #include "Interop/SpatialSender.h"
 #include "Interop/SpatialTypebindingManager.h"
 #include "Interop/SpatialView.h"
-#include "EngineClasses/SpatialActorChannel.h"
-#include "EngineClasses/SpatialNetConnection.h"
-#include "EngineClasses/SpatialPackageMapClient.h"
-#include "EngineClasses/SpatialPendingNetGame.h"
 #include "SpatialConstants.h"
+#include "Utils/ActorProxyRegistry.h"
 #include "Utils/EntityRegistry.h"
 
 DEFINE_LOG_CATEGORY(LogSpatialOSNetDriver);
