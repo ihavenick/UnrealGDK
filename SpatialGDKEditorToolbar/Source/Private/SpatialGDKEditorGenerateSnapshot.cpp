@@ -290,6 +290,7 @@ bool CreateStartupActor(Worker_SnapshotOutputStream* OutputStream, AActor* Actor
 	ComponentWriteAcl.Add(ActorInfo->RPCComponents[RPC_Server], UnrealServerPermission);
 	ComponentWriteAcl.Add(ActorInfo->RPCComponents[RPC_CrossServer], UnrealServerPermission);
 	ComponentWriteAcl.Add(ActorInfo->RPCComponents[RPC_NetMulticast], UnrealServerPermission);
+	ComponentWriteAcl.Add(SpatialConstants::INTEREST_COMPONENT_ID, UnrealServerPermission);
 
 	for (UClass* SubobjectClass : ActorInfo->SubobjectClasses)
 	{
@@ -303,6 +304,7 @@ bool CreateStartupActor(Worker_SnapshotOutputStream* OutputStream, AActor* Actor
 		ComponentWriteAcl.Add(SubobjectInfo->RPCComponents[RPC_Server], UnrealServerPermission);
 		ComponentWriteAcl.Add(SubobjectInfo->RPCComponents[RPC_CrossServer], UnrealServerPermission);
 		ComponentWriteAcl.Add(SubobjectInfo->RPCComponents[RPC_NetMulticast], UnrealServerPermission);
+		ComponentWriteAcl.Add(SpatialConstants::INTEREST_COMPONENT_ID, UnrealServerPermission);
 	}
 
 	USpatialActorChannel* Channel = Cast<USpatialActorChannel>(NetConnection->CreateChannel(CHTYPE_Actor, 1));
@@ -316,6 +318,7 @@ bool CreateStartupActor(Worker_SnapshotOutputStream* OutputStream, AActor* Actor
 	Components.Add(improbable::Persistence().CreatePersistenceData());
 	Components.Add(improbable::Rotation(Actor->GetActorRotation()).CreateRotationData());
 	Components.Add(improbable::UnrealMetadata(StaticPath, {}, improbable::CreateOffsetMapFromActor(Actor)).CreateUnrealMetadataData());
+	Components.Add(improbable::Interest().CreateInterestData());
 
 	Components.Append(CreateStartupActorData(Channel, Actor, TypebindingManager, Cast<USpatialNetDriver>(NetConnection->Driver)));
 

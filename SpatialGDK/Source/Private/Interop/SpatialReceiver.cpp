@@ -140,6 +140,9 @@ void USpatialReceiver::OnAddComponent(Worker_AddComponentOp& Op)
 	case SpatialConstants::UNREAL_METADATA_COMPONENT_ID:
 		Data = MakeShared<improbable::UnrealMetadata>(Op.data);
 		break;
+	case SpatialConstants::INTEREST_COMPONENT_ID:
+		Data = MakeShared<improbable::Interest>(Op.data);
+		break;
 	case SpatialConstants::GLOBAL_STATE_MANAGER_COMPONENT_ID:
 		GlobalStateManager->ApplyData(Op.data);
 		GlobalStateManager->LinkExistingSingletonActors();

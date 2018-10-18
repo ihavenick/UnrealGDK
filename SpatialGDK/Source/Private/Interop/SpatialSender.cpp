@@ -97,6 +97,7 @@ Worker_RequestId USpatialSender::CreateEntity(USpatialActorChannel* Channel)
 	ComponentWriteAcl.Add(Info->RPCComponents[RPC_Server], ServersOnly);
 	ComponentWriteAcl.Add(Info->RPCComponents[RPC_CrossServer], ServersOnly);
 	ComponentWriteAcl.Add(Info->RPCComponents[RPC_NetMulticast], ServersOnly);
+	ComponentWriteAcl.Add(SpatialConstants::INTEREST_COMPONENT_ID, ServersOnly);
 
 	for (UClass* SubobjectClass : Info->SubobjectClasses)
 	{
@@ -110,6 +111,7 @@ Worker_RequestId USpatialSender::CreateEntity(USpatialActorChannel* Channel)
 		ComponentWriteAcl.Add(ClassInfo->RPCComponents[RPC_Server], ServersOnly);
 		ComponentWriteAcl.Add(ClassInfo->RPCComponents[RPC_CrossServer], ServersOnly);
 		ComponentWriteAcl.Add(ClassInfo->RPCComponents[RPC_NetMulticast], ServersOnly);
+		ComponentWriteAcl.Add(SpatialConstants::INTEREST_COMPONENT_ID, ServersOnly);
 	}
 
 	TArray<Worker_ComponentData> ComponentDatas;
@@ -119,6 +121,7 @@ Worker_RequestId USpatialSender::CreateEntity(USpatialActorChannel* Channel)
 	ComponentDatas.Add(improbable::Persistence().CreatePersistenceData());
 	ComponentDatas.Add(improbable::Rotation(Actor->GetActorRotation()).CreateRotationData());
 	ComponentDatas.Add(improbable::UnrealMetadata({}, ClientWorkerAttribute, improbable::CreateOffsetMapFromActor(Actor)).CreateUnrealMetadataData());
+	ComponentDatas.Add(improbable::Interest().CreateInterestData());
 
 	FUnresolvedObjectsMap UnresolvedObjectsMap;
 	FUnresolvedObjectsMap HandoverUnresolvedObjectsMap;
