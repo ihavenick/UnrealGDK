@@ -326,7 +326,6 @@ void USpatialReceiver::ReceiveActor(Worker_EntityId EntityId)
 		EntityRegistry->AddToRegistry(EntityId, EntityActor);
 
 		// Set up actor channel.
-		USpatialPackageMapClient* SpatialPackageMap = Cast<USpatialPackageMapClient>(Connection->PackageMap);
 		USpatialActorChannel* Channel = Cast<USpatialActorChannel>(Connection->CreateChannel(CHTYPE_Actor, NetDriver->IsServer()));
 		check(Channel);
 
@@ -337,7 +336,7 @@ void USpatialReceiver::ReceiveActor(Worker_EntityId EntityId)
 			EntityActor->FinishSpawning(FTransform(Rotation->ToFRotator(), SpawnLocation));
 		}
 
-		SpatialPackageMap->ResolveEntityActor(EntityActor, EntityId, UnrealMetadataComponent->SubobjectNameToOffset);
+		PackageMap->ResolveEntityActor(EntityActor, EntityId, UnrealMetadataComponent->SubobjectNameToOffset);
 		Channel->SetChannelActor(EntityActor);
 
 		// Apply initial replicated properties.
@@ -438,14 +437,19 @@ void USpatialReceiver::RemoveActor(Worker_EntityId EntityId)
 	}
 	NetDriver->StopIgnoringAuthoritativeDestruction();
 
-	CleanupDeletedEntity(EntityId);
+	Actor->SetActorAsProxy(true);
+	//CleanupDeletedEntity(EntityId);
 }
 
 void USpatialReceiver::CleanupDeletedEntity(Worker_EntityId EntityId)
 {
 	NetDriver->GetEntityRegistry()->RemoveFromRegistry(EntityId);
 	NetDriver->RemoveActorChannel(EntityId);
-	Cast<USpatialPackageMapClient>(NetDriver->GetSpatialOSNetConnection()->PackageMap)->RemoveEntityActor(EntityId);
+
+	FNetworkGUID Guid = PackageMap->GetNetGUIDFromEntityId(EntityId);
+	FUnrealObjectRef ObjectRef = PackageMap->GetUnrealObjectRefFromNetGUID(Guid);
+
+	PackageMap->RemoveEntityActor(EntityId);
 }
 
 UClass* USpatialReceiver::GetNativeEntityClass(improbable::Metadata* Metadata)
