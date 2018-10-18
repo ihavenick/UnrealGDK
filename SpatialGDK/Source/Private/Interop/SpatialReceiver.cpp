@@ -437,17 +437,13 @@ void USpatialReceiver::RemoveActor(Worker_EntityId EntityId)
 	}
 	NetDriver->StopIgnoringAuthoritativeDestruction();
 
-	Actor->SetActorAsProxy(true);
-	//CleanupDeletedEntity(EntityId);
+	CleanupDeletedEntity(EntityId);
 }
 
 void USpatialReceiver::CleanupDeletedEntity(Worker_EntityId EntityId)
 {
 	NetDriver->GetEntityRegistry()->RemoveFromRegistry(EntityId);
 	NetDriver->RemoveActorChannel(EntityId);
-
-	FNetworkGUID Guid = PackageMap->GetNetGUIDFromEntityId(EntityId);
-	FUnrealObjectRef ObjectRef = PackageMap->GetUnrealObjectRefFromNetGUID(Guid);
 
 	PackageMap->RemoveEntityActor(EntityId);
 }
